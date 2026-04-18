@@ -1,0 +1,115 @@
+import { useState } from "react";
+import { useAppStore } from "./stores/useAppStore";
+import { Sidebar } from "./components/Sidebar/Sidebar";
+import { MapView } from "./components/Map/Map";
+import { Gallery } from "./components/Gallery/Gallery";
+import { PhotoViewer } from "./components/Gallery/PhotoViewer";
+import { ScrollArea } from "./components/ui/scroll-area";
+import { Toaster } from "./components/ui/sonner";
+import { useAuth } from "./auth/AuthContext";
+import { AuthModal } from "./auth/AuthModal";
+import { Button } from "./components/ui/button";
+import { LogIn, LogOut, User } from "lucide-react";
+
+export default function App() {
+  const { viewMode, photos, setViewMode } = useAppStore();
+  const { isSignedIn, user, logout } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground font-sans selection:bg-primary/20">
+      {/* Top Navigation */}
+      <header className="h-[60px] bg-card border-b border-border flex items-center justify-between px-6 z-100">
+        <div className="flex items-center gap-2.5 font-extrabold text-xl tracking-tighter text-primary">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          FOTOMAP
+        </div>
+
+        <nav className="flex bg-background p-1 rounded-lg gap-1">
+          <button
+            onClick={() => setViewMode("map")}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+              viewMode === "map" ? "bg-secondary text-primary" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Mapa
+          </button>
+          <button
+            onClick={() => setViewMode("gallery")}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+              viewMode === "gallery" ? "bg-secondary text-primary" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Galería
+          </button>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          {isSignedIn ? (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground bg-card border border-border/50 rounded-lg px-3 py-1.5">
+                <User className="w-3.5 h-3.5 text-primary" />
+                <span className="font-medium text-foreground">{user?.fullName || user?.email}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={logout}
+                className="gap-2 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Salir
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setAuthOpen(true)}
+              className="gap-2 text-xs font-bold border-border/50 hover:bg-primary hover:text-primary-foreground transition-all"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              Ingresar
+            </Button>
+          )}
+        </div>
+      </header>
+
+      {/* Main Layout */}
+      <main className="flex-1 flex overflow-hidden">
+        <Sidebar />
+        <div className="flex-1 relative overflow-hidden bg-[#111]">
+          {viewMode === "map" ? (
+            <div className="h-full w-full relative">
+              <MapView />
+            </div>
+          ) : (
+            <ScrollArea className="h-full w-full bg-zinc-950/50">
+              <Gallery />
+            </ScrollArea>
+          )}
+        </div>
+      </main>
+
+      {/* Status Bar */}
+      <footer className="h-8 bg-card border-t border-border px-6 flex items-center justify-between text-[11px] text-muted-foreground">
+        <div className="flex gap-4">
+          <span>Imágenes: {photos.length}</span>
+          <span>GPS: {photos.filter((p) => p.lat).length}</span>
+          <span>Storage: {(photos.reduce((acc, p) => acc + p.size, 0) / (1024 * 1024)).toFixed(1)} MB (Client-side)</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className={`w-2 h-2 rounded-full ${isSignedIn ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" : "bg-yellow-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"}`} />
+          {isSignedIn ? `Autenticado: ${user?.email}` : "Modo Invitado"}
+        </div>
+      </footer>
+
+      <Toaster position="bottom-right" theme="dark" />
+      <PhotoViewer />
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+    </div>
+  );
+}

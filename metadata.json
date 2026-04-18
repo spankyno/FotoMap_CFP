@@ -1,0 +1,8 @@
+{
+  "name": "FOTOMAP",
+  "description": "Geolocalización y visualización cartográfica de fotografías con procesamiento EXIF 100% en el navegador. Exporta a GeoJSON, KML, Shapefile y Excel.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
