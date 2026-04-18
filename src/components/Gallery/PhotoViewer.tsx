@@ -1,56 +1,35 @@
-import React, { useEffect } from "react";
-import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
+import React from "react";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { useAppStore } from "../../stores/useAppStore";
 import { X } from "lucide-react";
 
 export const PhotoViewer = () => {
   const { selectedPhoto, setSelectedPhoto } = useAppStore();
 
-  // Cerrar con Escape
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedPhoto(null);
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [setSelectedPhoto]);
-
   if (!selectedPhoto) return null;
 
   return (
-    <DialogPrimitive.Root open={!!selectedPhoto} onOpenChange={(open) => !open && setSelectedPhoto(null)}>
-      <DialogPrimitive.Portal>
-        {/* Backdrop */}
-        <DialogPrimitive.Backdrop
-          className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-sm"
-        />
-
-        {/* Popup: ocupa toda la pantalla, centra la imagen */}
-        <DialogPrimitive.Popup
-          className="fixed inset-0 z-[1000] flex items-center justify-center outline-none"
-        >
-          <DialogPrimitive.Title className="sr-only">
-            Visualización de foto: {selectedPhoto.name}
-          </DialogPrimitive.Title>
-
-          {/* Imagen — ocupa hasta el 95% del viewport en cada eje */}
+    <Dialog open={!!selectedPhoto} onOpenChange={(open) => !open && setSelectedPhoto(null)}>
+      <DialogContent
+        showCloseButton={false}
+        className="max-w-[95vw] w-[95vw] h-[95vh] p-0 overflow-hidden bg-black/95 border-none shadow-none flex items-center justify-center"
+      >
+        <DialogTitle className="sr-only">Visualización de foto: {selectedPhoto.name}</DialogTitle>
+        <div className="relative w-full h-full flex items-center justify-center">
           <img
             src={selectedPhoto.thumbnail || ""}
             alt={selectedPhoto.name}
-            className="max-w-[95vw] max-h-[95vh] w-auto h-auto object-contain shadow-2xl rounded-sm"
+            className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
             referrerPolicy="no-referrer"
           />
-
-          {/* Botón cerrar */}
           <button
             onClick={() => setSelectedPhoto(null)}
-            className="absolute top-5 right-5 p-2 rounded-full bg-black/50 text-white/80 hover:bg-black/80 hover:text-white transition-all backdrop-blur-sm z-50"
-            aria-label="Cerrar"
+            className="absolute top-4 right-4 p-2 rounded-full bg-black/40 text-white/70 hover:bg-black/80 hover:text-white transition-all backdrop-blur-sm z-50"
           >
             <X className="w-6 h-6" />
           </button>
-        </DialogPrimitive.Popup>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };

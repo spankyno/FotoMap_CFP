@@ -4,6 +4,7 @@ import L from "leaflet";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import HeatmapLayer from "./HeatmapLayer";
 import { useAppStore } from "../../stores/useAppStore";
+import { useUser } from "@clerk/clerk-react";
 import { PhotoData } from "../../types";
 import { Card } from "../ui/card";
 import { Camera, MapPin, Calendar, ZoomIn } from "lucide-react";
@@ -87,8 +88,18 @@ const FlyToFocused = ({
 
 export const MapView = () => {
   const { photos, showHeatmap, showRoute, focusedPhotoId, setSelectedPhoto } = useAppStore();
+  const { isSignedIn } = useUser();
 
-  const validPhotos = useMemo(() => photos.filter((p) => p.lat !== null && p.lng !== null), [photos]);
+  const allValidPhotos = useMemo(() => photos.filter((p) => p.lat !== null && p.lng !== null), [photos]);
+  
+  const validPhotos = useMemo(() => {
+    if (!isSignedIn && allValidPhotos.length > 50) {
+        return allValidPhotos.slice(0, 50);
+    }
+    return allValidPhotos;
+  }, [allValidPhotos, isSignedIn]);
+
+  const markersLimitReached = !isSignedIn && allValidPhotos.length > 50;
 
   // Ref compartido entre MapView y FlyToFocused para acceder a los markers
   const markersRef = useRef<{ [key: string]: L.Marker }>({});
@@ -212,6 +223,15 @@ export const MapView = () => {
         <MapEvents photos={validPhotos} />
         <FlyToFocused validPhotos={validPhotos} markersRef={markersRef} />
       </MapContainer>
+
+      {markersLimitReached && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1001]">
+            <div className="bg-amber-500/90 backdrop-blur-sm text-amber-950 px-4 py-2 rounded-full shadow-lg border border-amber-400 flex items-center gap-2 text-xs font-bold animate-in fade-in zoom-in duration-300">
+                <span>⚠️ Límite de 50 fotos para invitados (Total: {allValidPhotos.length})</span>
+                <button className="underline hover:no-underline ml-1">Regístrate para ver todas</button>
+            </div>
+        </div>
+      )}
     </div>
   );
 };
