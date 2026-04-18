@@ -4,7 +4,7 @@ import L from "leaflet";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import HeatmapLayer from "./HeatmapLayer";
 import { useAppStore } from "../../stores/useAppStore";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "../../auth/AuthContext";
 import { PhotoData } from "../../types";
 import { Card } from "../ui/card";
 import { Camera, MapPin, Calendar, ZoomIn } from "lucide-react";

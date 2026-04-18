@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppStore } from "../../stores/useAppStore";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "../../auth/AuthContext";
 import { Button } from "../ui/button";
 import { 
   Map as MapIcon, 
