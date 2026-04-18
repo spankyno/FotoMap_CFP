@@ -5,4 +5,4 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "fotomap_db"
-database_id = "Y9afd3520-129f-4580-b926-f50d1d2d2a92"
+database_id = "9afd3520-129f-4580-b926-f50d1d2d2a92"
