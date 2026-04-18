@@ -1,23 +1,35 @@
-import { useState } from "react";
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { useAppStore } from "./stores/useAppStore";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { MapView } from "./components/Map/Map";
 import { Gallery } from "./components/Gallery/Gallery";
 import { PhotoViewer } from "./components/Gallery/PhotoViewer";
+import { Footer } from "./components/Layout/Footer";
+import { AboutPage } from "./components/About/AboutPage";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Toaster } from "./components/ui/sonner";
-import { useAuth } from "./auth/AuthContext";
-import { AuthModal } from "./auth/AuthModal";
+import { 
+  SignedIn, 
+  SignedOut, 
+  SignInButton, 
+  UserButton,
+  useAuth
+} from "@clerk/clerk-react";
 import { Button } from "./components/ui/button";
-import { LogIn, LogOut, User } from "lucide-react";
+import { LogIn } from "lucide-react";
+import { useState } from "react";
 
 export default function App() {
   const { viewMode, photos, setViewMode } = useAppStore();
-  const { isSignedIn, user, logout } = useAuth();
-  const [authOpen, setAuthOpen] = useState(false);
+  const { isSignedIn } = useAuth();
+  const [showAbout, setShowAbout] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground font-sans selection:bg-primary/20">
+    <div className="flex flex-col h-screen w-screen bg-background text-foreground font-sans selection:bg-primary/20 overflow-hidden">
       {/* Top Navigation */}
       <header className="h-[60px] bg-card border-b border-border flex items-center justify-between px-6 z-100">
         <div className="flex items-center gap-2.5 font-extrabold text-xl tracking-tighter text-primary">
@@ -48,68 +60,71 @@ export default function App() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {isSignedIn ? (
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground bg-card border border-border/50 rounded-lg px-3 py-1.5">
-                <User className="w-3.5 h-3.5 text-primary" />
-                <span className="font-medium text-foreground">{user?.fullName || user?.email}</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={logout}
-                className="gap-2 text-xs text-muted-foreground hover:text-foreground"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                Salir
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button variant="outline" size="sm" className="gap-2 text-xs font-bold border-border/50 hover:bg-primary hover:text-primary-foreground transition-all">
+                <LogIn className="w-3.5 h-3.5" />
+                Ingresar
               </Button>
-            </div>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setAuthOpen(true)}
-              className="gap-2 text-xs font-bold border-border/50 hover:bg-primary hover:text-primary-foreground transition-all"
-            >
-              <LogIn className="w-3.5 h-3.5" />
-              Ingresar
-            </Button>
-          )}
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton 
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  avatarBox: "w-9 h-9 border-2 border-primary/20 hover:border-primary/50 transition-all",
+                  userButtonPopoverCard: "bg-card border border-border shadow-xl",
+                  userButtonPopoverActionButton: "hover:bg-accent",
+                  userButtonPopoverActionButtonText: "text-foreground",
+                  userButtonPopoverFooter: "hidden"
+                }
+              }}
+            />
+          </SignedIn>
         </div>
       </header>
 
       {/* Main Layout */}
       <main className="flex-1 flex overflow-hidden">
         <Sidebar />
-        <div className="flex-1 relative overflow-hidden bg-[#111]">
-          {viewMode === "map" ? (
-            <div className="h-full w-full relative">
-              <MapView />
-            </div>
-          ) : (
-            <ScrollArea className="h-full w-full bg-zinc-950/50">
-              <Gallery />
-            </ScrollArea>
-          )}
+
+        <div className="flex-1 overflow-hidden bg-[#111] flex flex-col">
+          <div className="flex-1 relative overflow-hidden">
+            {viewMode === "map" ? (
+              <div className="h-full w-full relative">
+                <MapView />
+              </div>
+            ) : (
+              <ScrollArea className="h-full w-full bg-zinc-950/50">
+                <Gallery />
+                <Footer onOpenAbout={() => setShowAbout(true)} />
+              </ScrollArea>
+            )}
+          </div>
         </div>
       </main>
 
       {/* Status Bar */}
-      <footer className="h-8 bg-card border-t border-border px-6 flex items-center justify-between text-[11px] text-muted-foreground">
-        <div className="flex gap-4">
-          <span>Imágenes: {photos.length}</span>
-          <span>GPS: {photos.filter((p) => p.lat).length}</span>
-          <span>Storage: {(photos.reduce((acc, p) => acc + p.size, 0) / (1024 * 1024)).toFixed(1)} MB (Client-side)</span>
+      <footer className="h-10 border-t border-border px-6 flex items-center justify-between text-[11px] text-muted-foreground bg-card/80 backdrop-blur-md">
+        <div className="flex items-center gap-6">
+            <div className="flex gap-4">
+                <span>Imágenes: {photos.length}</span>
+                <span>GPS: {photos.filter((p) => p.lat).length}</span>
+                <span>Storage: {(photos.reduce((acc, p) => acc + p.size, 0) / (1024 * 1024)).toFixed(1)} MB (Local)</span>
+            </div>
+            <button onClick={() => setShowAbout(true)} className="hover:text-primary underline underline-offset-4 decoration-border">Acerca de</button>
         </div>
         <div className="flex items-center gap-1.5">
           <div className={`w-2 h-2 rounded-full ${isSignedIn ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" : "bg-yellow-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"}`} />
-          {isSignedIn ? `Autenticado: ${user?.email}` : "Modo Invitado"}
+          {isSignedIn ? "Autenticado vía Clerk" : "Modo Invitado (Límite: 50 fotos)"}
         </div>
       </footer>
 
+      {showAbout && <AboutPage onClose={() => setShowAbout(false)} />}
+
       <Toaster position="bottom-right" theme="dark" />
       <PhotoViewer />
-      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }
