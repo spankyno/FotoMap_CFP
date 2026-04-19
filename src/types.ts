@@ -13,7 +13,8 @@ export interface PhotoData {
   iso: number | null;
   speed: string | null;
   aperture: string | null;
-  thumbnail: string | null; // Base64
+  thumbnail: string | null;  // Base64 pequeña (200px) — para galería y marcadores
+  fullImage: string | null;  // Base64 grande (1920px) — para el visor
   file: File;
 }
 
