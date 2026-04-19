@@ -18,8 +18,11 @@ export const processPhoto = async (file: File): Promise<PhotoData | null> => {
     const speed = data.ExposureTime ? data.ExposureTime.description : null;
     const aperture = data.FNumber ? data.FNumber.description : null;
 
-    // Generate Thumbnail
-    const thumbnail = await generateThumbnail(file);
+    // Generar miniatura pequeña (galería/marcadores) y versión grande (visor)
+    const [thumbnail, fullImage] = await Promise.all([
+      generateResized(file, 200, 0.75),
+      generateResized(file, 1920, 0.92),
+    ]);
 
     return {
       id: crypto.randomUUID(),
@@ -37,6 +40,7 @@ export const processPhoto = async (file: File): Promise<PhotoData | null> => {
       speed,
       aperture,
       thumbnail,
+      fullImage,
       file
     };
   } catch (err) {
@@ -45,35 +49,37 @@ export const processPhoto = async (file: File): Promise<PhotoData | null> => {
   }
 };
 
-const generateThumbnail = (file: File): Promise<string | null> => {
+/**
+ * Redimensiona una imagen al tamaño máximo indicado manteniendo el ratio.
+ * @param file   Archivo de imagen original
+ * @param maxPx  Lado máximo (ancho o alto) en píxeles
+ * @param quality Calidad JPEG (0–1)
+ */
+const generateResized = (file: File, maxPx: number, quality: number): Promise<string | null> => {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const MAX_WIDTH = 200;
-        const MAX_HEIGHT = 200;
-        let width = img.width;
-        let height = img.height;
+        let { width, height } = img;
 
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height;
-            height = MAX_HEIGHT;
+        // Solo reducir, nunca ampliar
+        if (width > maxPx || height > maxPx) {
+          if (width >= height) {
+            height = Math.round((height * maxPx) / width);
+            width = maxPx;
+          } else {
+            width = Math.round((width * maxPx) / height);
+            height = maxPx;
           }
         }
 
+        const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", 0.7));
+        resolve(canvas.toDataURL("image/jpeg", quality));
       };
       img.onerror = () => resolve(null);
       img.src = e.target?.result as string;
