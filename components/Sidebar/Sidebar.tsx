@@ -42,7 +42,7 @@ export const Sidebar = () => {
       case "html":        generateShareableHTML(photos); break;
       case "html-thumbs": generateShareableHTMLWithThumbs(photos); break;
     }
-    toast.success(`Exportación generada correctamente.`);
+    toast.success("Exportación generada correctamente.");
   };
 
   const lockedClass = (locked: boolean) =>
@@ -96,22 +96,19 @@ export const Sidebar = () => {
           Exportar Proyecto
         </h3>
         <div className="grid grid-cols-2 gap-2">
-          {/* Excel — libre */}
+
           <Button variant="secondary" size="sm" className={lockedClass(false)} onClick={() => handleExport("excel")}>
             <FileSpreadsheet className="w-3.5 h-3.5 text-green-400" />Excel
           </Button>
 
-          {/* GeoJSON */}
           <Button variant="secondary" size="sm" className={lockedClass(!isSignedIn)} onClick={() => handleExport("geojson")}>
             <FileJson className="w-3.5 h-3.5 text-sky-400" />GeoJSON
           </Button>
 
-          {/* KML */}
           <Button variant="secondary" size="sm" className={lockedClass(!isSignedIn)} onClick={() => handleExport("kml")}>
             <Globe className="w-3.5 h-3.5 text-blue-400" />KML
           </Button>
 
-          {/* Shapefile */}
           <Button variant="secondary" size="sm" className={lockedClass(!isSignedIn)} onClick={() => handleExport("shp")}>
             <Archive className="w-3.5 h-3.5 text-purple-400" />Shapefile
           </Button>
@@ -135,6 +132,7 @@ export const Sidebar = () => {
             <Image className="w-4 h-4" />
             Mapa compartible (miniaturas)
           </Button>
+
         </div>
       </div>
     </div>
