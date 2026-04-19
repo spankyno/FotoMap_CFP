@@ -3,9 +3,128 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FotoMap – Visualiza tus fotos en el mapa</title>
-    <meta name="description" content="Sube tus fotos con GPS y visualízalas en un mapa interactivo." />
+
+    <!-- ═══════════════════════════════════════════════════
+         SEO BÁSICO
+    ════════════════════════════════════════════════════ -->
+    <title>FotoMap · Visualiza y geolocaliza tus fotos en mapas interactivos</title>
+    <meta name="description" content="Sube tus fotografías con datos GPS, extrae metadatos EXIF automáticamente y explóralas en un mapa interactivo. Exporta a GeoJSON, KML, Shapefile o genera mapas web compartibles. Gratis y sin instalación." />
+    <meta name="keywords" content="mapa de fotos, geolocalización fotografías, EXIF GPS, mapa interactivo fotos, visualizar fotos mapa, exportar KML fotos, GeoJSON fotografías" />
+    <meta name="author" content="Aitor Sánchez Gutiérrez" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://fotomap-cfp.pages.dev/" />
+
+    <!-- ═══════════════════════════════════════════════════
+         GOOGLE SITE VERIFICATION
+    ════════════════════════════════════════════════════ -->
+    <meta name="google-site-verification" content="fK2gZcSYwHHPqDFWdIB5WD1eVONqa6kwIFqkRDRyX4g" />
+
+    <!-- ═══════════════════════════════════════════════════
+         FAVICONS
+    ════════════════════════════════════════════════════ -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/og-image.png" sizes="any" />
+    <link rel="apple-touch-icon" href="/og-image.png" />
+
+    <!-- ═══════════════════════════════════════════════════
+         OPEN GRAPH (Facebook, WhatsApp, LinkedIn…)
+    ════════════════════════════════════════════════════ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FotoMap" />
+    <meta property="og:title" content="FotoMap · Geolocaliza tus fotos en mapas interactivos" />
+    <meta property="og:description" content="Sube tus fotografías con GPS, extrae metadatos EXIF y explóralas en un mapa interactivo. Exporta a GeoJSON, KML, Shapefile o genera mapas web compartibles." />
+    <meta property="og:url" content="https://fotomap-cfp.pages.dev/" />
+    <meta property="og:image" content="https://fotomap-cfp.pages.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FotoMap – Mapa interactivo con fotos geolocalizadas" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- ═══════════════════════════════════════════════════
+         TWITTER / X CARDS
+    ════════════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FotoMap · Geolocaliza tus fotos en mapas interactivos" />
+    <meta name="twitter:description" content="Sube tus fotografías con GPS, extrae metadatos EXIF y explóralas en un mapa interactivo. Exporta a GeoJSON, KML o genera mapas web compartibles." />
+    <meta name="twitter:image" content="https://fotomap-cfp.pages.dev/og-image.png" />
+    <meta name="twitter:image:alt" content="FotoMap – Mapa interactivo con fotos geolocalizadas" />
+    <meta name="twitter:creator" content="@AitorSanchez" />
+
+    <!-- ═══════════════════════════════════════════════════
+         STRUCTURED DATA — JSON-LD
+    ════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://fotomap-cfp.pages.dev/#app",
+          "name": "FotoMap",
+          "url": "https://fotomap-cfp.pages.dev/",
+          "description": "Aplicación web para visualizar fotografías geolocalizadas en mapas interactivos. Extrae metadatos EXIF, genera rutas cronológicas, mapas de calor y exporta a múltiples formatos GIS.",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript",
+          "inLanguage": "es",
+          "isAccessibleForFree": true,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+          },
+          "featureList": [
+            "Extracción automática de metadatos EXIF y coordenadas GPS",
+            "Visualización de fotos en mapa interactivo con clustering",
+            "Mapa de calor de densidad fotográfica",
+            "Ruta cronológica entre puntos",
+            "Exportación a Excel, GeoJSON, KML y Shapefile",
+            "Generación de mapas web compartibles en HTML",
+            "Visor de fotos a pantalla completa"
+          ],
+          "screenshot": "https://fotomap-cfp.pages.dev/og-image.png",
+          "author": {
+            "@id": "https://fotomap-cfp.pages.dev/#author"
+          },
+          "creator": {
+            "@id": "https://fotomap-cfp.pages.dev/#author"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://fotomap-cfp.pages.dev/#author",
+          "name": "Aitor Sánchez Gutiérrez",
+          "url": "https://aitorhub.vercel.app/",
+          "sameAs": [
+            "https://aitorblog.infinityfreeapp.com/",
+            "https://aitorhub.vercel.app/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://fotomap-cfp.pages.dev/#website",
+          "name": "FotoMap",
+          "url": "https://fotomap-cfp.pages.dev/",
+          "inLanguage": "es",
+          "author": {
+            "@id": "https://fotomap-cfp.pages.dev/#author"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "FotoMap",
+              "item": "https://fotomap-cfp.pages.dev/"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
   </head>
   <body>
     <div id="root"></div>
