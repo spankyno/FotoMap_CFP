@@ -60,7 +60,7 @@ Para ejecutar este proyecto localmente:
 1. Clonar el repositorio.
 2. Instalar dependencias: `npm install`.
 3. Configurar variables de entorno:
-   - `VITE_CLERK_PUBLISHABLE_KEY`: Tu clave pública de Clerk.
+   - `VITE_CLERK_PUBLISHABLE_KEY`: Tu clave pública de Clerk. 
 4. Iniciar servidor de desarrollo: `npm run dev`.
 
 ---
