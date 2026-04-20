@@ -6,9 +6,15 @@ export const processPhoto = async (file: File): Promise<PhotoData | null> => {
     const data = await ExifReader.load(file);
     
     // Extract GPS
-    const lat = data.GPSLatitude ? (data.GPSLatitude.description as any) : null;
+    // GPSLatitude/GPSLongitude.description gives an unsigned decimal degree value.
+    // We must apply the hemisphere reference (N/S, E/W) to get the correct sign.
+    const rawLat = data.GPSLatitude ? (data.GPSLatitude.description as any) : null;
     const rawLng = data.GPSLongitude ? (data.GPSLongitude.description as any) : null;
-    const lngRef = data.GPSLongitudeRef ? data.GPSLongitudeRef.description : 'E';
+    // .description devuelve "North latitude" / "West longitude" (texto largo),
+    // hay que usar .value[0] que sí devuelve "N", "S", "E" o "W"
+    const latRef = data.GPSLatitudeRef ? (data.GPSLatitudeRef.value as any)[0] : 'N';
+    const lngRef = data.GPSLongitudeRef ? (data.GPSLongitudeRef.value as any)[0] : 'E';
+    const lat = typeof rawLat === 'number' ? (latRef === 'S' ? -rawLat : rawLat) : null;
     const lng = typeof rawLng === 'number' ? (lngRef === 'W' ? -rawLng : rawLng) : null;
     const alt = data.GPSAltitude ? parseFloat(data.GPSAltitude.description) : null;
     
@@ -32,8 +38,8 @@ export const processPhoto = async (file: File): Promise<PhotoData | null> => {
       size: file.size,
       type: file.type,
       lastModified: file.lastModified,
-      lat: typeof lat === 'number' ? lat : null,
-      lng: typeof lng === 'number' ? lng : null,
+      lat,
+      lng,
       alt,
       date,
       make,
