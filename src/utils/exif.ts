@@ -7,7 +7,9 @@ export const processPhoto = async (file: File): Promise<PhotoData | null> => {
     
     // Extract GPS
     const lat = data.GPSLatitude ? (data.GPSLatitude.description as any) : null;
-    const lng = data.GPSLongitude ? (data.GPSLongitude.description as any) : null;
+    const rawLng = data.GPSLongitude ? (data.GPSLongitude.description as any) : null;
+    const lngRef = data.GPSLongitudeRef ? data.GPSLongitudeRef.description : 'E';
+    const lng = typeof rawLng === 'number' ? (lngRef === 'W' ? -rawLng : rawLng) : null;
     const alt = data.GPSAltitude ? parseFloat(data.GPSAltitude.description) : null;
     
     // Extract Metadata
