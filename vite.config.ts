@@ -4,12 +4,16 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
+ 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+ 
 export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
+  define: {
+    // shp-write usa process.env.NODE_ENV internamente, que no existe en el navegador
+    'process.env.NODE_ENV': JSON.stringify('production'),
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
