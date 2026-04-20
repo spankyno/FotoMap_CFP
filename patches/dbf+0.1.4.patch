@@ -1,0 +1,12 @@
+diff --git a/node_modules/dbf/src/structure.js b/node_modules/dbf/src/structure.js
+index 1234567..abcdefg 100644
+--- a/node_modules/dbf/src/structure.js
++++ b/node_modules/dbf/src/structure.js
+@@ -41,7 +41,7 @@
+     // Terminator
+     view.setInt8(32 + fieldDescLength - 1, 0x0D);
+ 
+-    offset = fieldDescLength + 32;
++    var offset = fieldDescLength + 32;
+ 
+     data.forEach(function(row, num) {
