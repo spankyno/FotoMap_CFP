@@ -57,7 +57,11 @@ export const exportToKML = (photos: PhotoData[]) => {
 };
 
 export const exportToShapefile = (photos: PhotoData[]) => {
-  shpwrite.download(toGeoJSON(photos), { folder: "fotomap_shp", types: { point: "fotomap" } });
+  // shpwrite.download() usa location.href con data URI, bloqueado en navegadores modernos.
+  // Usamos zip() que devuelve un Uint8Array y lo descargamos con file-saver.
+  const zipData = shpwrite.zip(toGeoJSON(photos), { folder: "fotomap_shp", types: { point: "fotomap" } });
+  const blob = new Blob([zipData], { type: "application/zip" });
+  saveAs(blob, "fotomap_shp.zip");
 };
 
 // ─── Tile providers sin restricción de Referer ───────────────────────────────
