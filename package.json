@@ -8,7 +8,6 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
-    "postinstall": "patch-package",
     "pages:dev": "wrangler pages dev dist --compatibility-date=2024-09-23",
     "pages:deploy": "wrangler pages deploy dist"
   },
@@ -34,7 +33,6 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^15.0.0",
     "react-leaflet": "^5.0.0",
-    "shp-write": "^0.3.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "tokml": "^0.4.0",
@@ -48,7 +46,6 @@
     "@cloudflare/workers-types": "^4.20250620.0",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
-    "patch-package": "^8.0.1",
     "tailwindcss": "^4.1.14",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
