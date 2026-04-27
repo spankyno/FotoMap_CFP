@@ -69,11 +69,9 @@ Para ejecutar este proyecto localmente:
 
 Desarrollado con pasión por **Aitor Sánchez Gutiérrez**.
 
-- **Sitio Web/Blog**: [aitorblog.infinityfreeapp.com](https://aitorsanchez.pages.dev/)
+- **Sitio Web/Blog**: [aitorsanchez.pages.dev](https://aitorsanchez.pages.dev/)
 - **Contacto**: [aitor-blog-contacto.vercel.app](https://aitor-blog-contacto.vercel.app/)
 - **Más Proyectos**: [aitorhub.vercel.app](https://aitorhub.vercel.app/)
 
 © 2026 - Todos los derechos reservados.
-
-https://aitorsanchez.pages.dev/
 
