@@ -46,7 +46,7 @@ export const Footer = ({ onOpenAbout }: { onOpenAbout: () => void }) => {
               <Globe className="w-3.5 h-3.5" />
               Blog Personal
             </a>
-            <a href="https://aitor-blog-contacto.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
+            <a href="https://aitorsanchez.pages.dev/contacto/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
               <MessageSquare className="w-3.5 h-3.5" />
               Contacto
             </a>
