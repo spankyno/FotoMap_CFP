@@ -169,7 +169,7 @@ export const AboutPage = ({ onClose }: { onClose: () => void }) => {
             Diseñado y Desarrollado por Aitor Sánchez Gutiérrez
           </p>
           <div className="flex justify-center gap-8 text-zinc-400">
-            <a href="https://aitor-blog-contacto.vercel.app/" className="hover:text-white transition-colors"><ShieldCheck className="w-5 h-5" /></a>
+            <a href="https://aitorsanchez.pages.dev/contacto/" className="hover:text-white transition-colors"><ShieldCheck className="w-5 h-5" /></a>
             <a href="https://aitorhub.vercel.app/" className="hover:text-white transition-colors"><Zap className="w-5 h-5" /></a>
           </div>
         </div>
